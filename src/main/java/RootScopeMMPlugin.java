@@ -30,9 +30,6 @@ public class RootScopeMMPlugin implements
     public void setApp(ScriptInterface app) {
         this.app_ = app;
         this.core = app.getMMCore();
-
-
-        System.out.println("setApp");
     }
 
     @Override
@@ -42,7 +39,6 @@ public class RootScopeMMPlugin implements
         InetAddress addr;
 
         this.dataProvider = new DataProviderMM(core);
-        System.out.println("provider");
 
         try {
             addr = InetAddress.getLocalHost();
@@ -57,9 +53,7 @@ public class RootScopeMMPlugin implements
         try {
             MMServer.SetServiceDataProvider(dataProvider);
             MMServer.main(new String[] { Integer.toString(port)});
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
