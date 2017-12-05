@@ -1,3 +1,4 @@
+import grpc.server.DataProvider;
 import grpc.server.MMServer;
 import mmcorej.CMMCore;
 import org.micromanager.api.MMPlugin;
@@ -18,17 +19,19 @@ public class RootScopeMMPlugin implements
     private ScriptInterface app_;
     // Provides access to the Micro-Manager Core API (for direct hardware
     // control)
-    private CMMCore core_;
+    private CMMCore core;
+    private DataProvider dataProvider;
 
     @Override
     public void dispose() {
-
     }
 
     @Override
     public void setApp(ScriptInterface app) {
         this.app_ = app;
-        this.core_ = app.getMMCore();
+        this.core = app.getMMCore();
+
+
         System.out.println("setApp");
     }
 
@@ -37,6 +40,9 @@ public class RootScopeMMPlugin implements
 
         int port = 50051;
         InetAddress addr;
+
+        this.dataProvider = new DataProviderMM(core);
+        System.out.println("provider");
 
         try {
             addr = InetAddress.getLocalHost();
@@ -49,13 +55,13 @@ public class RootScopeMMPlugin implements
                 JOptionPane.PLAIN_MESSAGE);
 
         try {
+            MMServer.SetServiceDataProvider(dataProvider);
             MMServer.main(new String[] { Integer.toString(port)});
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
