@@ -1,12 +1,20 @@
 import grpc.server.DataProvider;
 import mmcorej.CMMCore;
 import mmcorej.StrVector;
+import org.micromanager.api.ScriptInterface;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class DataProviderMM implements DataProvider {
 
     private CMMCore core;
+    private ScriptInterface si;
 
-    public DataProviderMM(CMMCore core) {
+    public DataProviderMM(CMMCore core, ScriptInterface si) {
+        this.si = si;
         this.core = core;
     }
 
@@ -14,19 +22,22 @@ public class DataProviderMM implements DataProvider {
     public byte[] getImgData1() {
 
         try {
-//            core.loadDevice("Camera", "DemoCamera", "DCam");
-//            core.initializeDevice("Camera");
-//            core.setExposure(50);
-//            core.snapImage();
-//            return (byte[]) core.getImage();
-
-            System.out.println("data from MMCore");
-            return new byte[0];
+            ByteArrayOutputStream baos = null;
+            BufferedImage bi = si.getSnapLiveWin().getCanvas().getImage().getBufferedImage();
+            try {
+                baos = new ByteArrayOutputStream();
+                ImageIO.write(bi, "png", baos);
+            } finally {
+                try {
+                    baos.close();
+                } catch (Exception e) {
+                }
+            }
+            return  baos.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
+            return new byte[0];
         }
-
-        return null;
     }
 
     @Override
@@ -39,6 +50,8 @@ public class DataProviderMM implements DataProvider {
         try {
             props = core.getDevicePropertyNames(camera);
             builder = new StringBuilder();
+
+            builder.append(camera);
 
             for (String entry : props) {
                 String val = core.getProperty(camera, entry);

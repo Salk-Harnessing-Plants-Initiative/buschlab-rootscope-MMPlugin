@@ -16,7 +16,7 @@ public class RootScopeMMPlugin implements
 
     // Provides access to the Micro-Manager Java API (for GUI control and high-
     // level functions).
-    private ScriptInterface app_;
+    private ScriptInterface app;
     // Provides access to the Micro-Manager Core API (for direct hardware
     // control)
     private CMMCore core;
@@ -28,7 +28,7 @@ public class RootScopeMMPlugin implements
 
     @Override
     public void setApp(ScriptInterface app) {
-        this.app_ = app;
+        this.app = app;
         this.core = app.getMMCore();
     }
 
@@ -38,7 +38,7 @@ public class RootScopeMMPlugin implements
         int port = 50051;
         InetAddress addr;
 
-        this.dataProvider = new DataProviderMM(core);
+        this.dataProvider = new DataProviderMM(core, app);
 
         try {
             addr = InetAddress.getLocalHost();
