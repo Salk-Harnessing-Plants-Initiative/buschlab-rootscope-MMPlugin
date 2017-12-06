@@ -16,25 +16,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>local-repository</id>-->
-            <!--<url>file:///Users/alexander.bindeus/local-repository</url>-->
-            <!--&lt;!&ndash;<url>file:///${project.basedir}/local-repository</url>&ndash;&gt;-->
-        <!--</repository>-->
-    <!--</repositories>-->
-
     <dependencies>
         <dependency>
             <groupId>at.ac.oeaw.gmi.busch</groupId>
             <artifactId>RootScopeServer</artifactId>
             <version>1.1</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.google.guava</groupId>-->
-            <!--<artifactId>guava</artifactId>-->
-            <!--<version>23.5-jre</version>-->
-        <!--</dependency>-->
     </dependencies>
 </project>
