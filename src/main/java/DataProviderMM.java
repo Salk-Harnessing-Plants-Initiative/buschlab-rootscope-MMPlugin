@@ -5,7 +5,6 @@ import org.micromanager.api.ScriptInterface;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 public class DataProviderMM implements DataProvider {
@@ -62,5 +61,10 @@ public class DataProviderMM implements DataProvider {
             return "exception thrown";
         }
         return builder.toString();
+    }
+
+    @Override
+    public String autoScaleContrast() {
+        si.setContrastBasedOnFrame(1,1);
     }
 }
