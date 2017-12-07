@@ -32,7 +32,7 @@ public class DataProviderMM implements DataProvider {
                 } catch (Exception e) {
                 }
             }
-            return  baos.toByteArray();
+            return baos.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
             return new byte[0];

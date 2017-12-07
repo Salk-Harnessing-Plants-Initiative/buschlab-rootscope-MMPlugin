@@ -20,10 +20,10 @@ public class MicroManagerPlugin implements
     // Provides access to the Micro-Manager Core API (for direct hardware
     // control)
     private CMMCore core;
-    private DataProvider dataProvider;
 
     @Override
     public void dispose() {
+
     }
 
     @Override
@@ -35,27 +35,27 @@ public class MicroManagerPlugin implements
     @Override
     public void show() {
 
-        int port = 50051;
-        InetAddress addr;
+        RemoteDialog dialog = new RemoteDialog(this, app);
 
-        this.dataProvider = new DataProviderMM(core, app);
-
-        try {
-            addr = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            addr = null;
-        }
-
-        JOptionPane.showMessageDialog(null, "remote rootscope server plugin started, listening on" +
-                        " port " + port + "\non machine " + addr, "remote rootscope server plugin",
-                JOptionPane.PLAIN_MESSAGE);
-
-        try {
-            MMServer.SetServiceDataProvider(dataProvider);
-            MMServer.main(new String[] { Integer.toString(port)});
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        int port = 50051;
+//        InetAddress addr;
+//
+//        this.dataProvider = new DataProviderMM(core, app);
+//
+//        try {
+//            addr = InetAddress.getLocalHost();
+//        } catch (UnknownHostException e) {
+//            addr = null;
+//        }
+//
+//
+//
+//        try {
+//            MMServer.SetServiceDataProvider(dataProvider);
+//            MMServer.main(new String[] { Integer.toString(port)});
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
