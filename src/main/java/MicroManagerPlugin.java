@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class RootScopeMMPlugin implements
+public class MicroManagerPlugin implements
         MMPlugin {
     public static final String menuName = "rootscope remote control";
     public static final String tooltipDescription = "rootscope remote control";

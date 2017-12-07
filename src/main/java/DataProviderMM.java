@@ -64,7 +64,8 @@ public class DataProviderMM implements DataProvider {
     }
 
     @Override
-    public String autoScaleContrast() {
-        si.setContrastBasedOnFrame(1,1);
+    public boolean autoScaleContrast() {
+        //si.setContrastBasedOnFrame(1,1);
+        return true;
     }
 }
