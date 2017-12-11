@@ -1,13 +1,6 @@
-import grpc.server.DataProvider;
-import grpc.server.MMServer;
 import mmcorej.CMMCore;
 import org.micromanager.api.MMPlugin;
 import org.micromanager.api.ScriptInterface;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class MicroManagerPlugin implements
         MMPlugin {
@@ -34,28 +27,7 @@ public class MicroManagerPlugin implements
 
     @Override
     public void show() {
-
         RemoteDialog dialog = new RemoteDialog(this, app);
-
-//        int port = 50051;
-//        InetAddress addr;
-//
-//        this.dataProvider = new DataProviderMM(core, app);
-//
-//        try {
-//            addr = InetAddress.getLocalHost();
-//        } catch (UnknownHostException e) {
-//            addr = null;
-//        }
-//
-//
-//
-//        try {
-//            MMServer.SetServiceDataProvider(dataProvider);
-//            MMServer.main(new String[] { Integer.toString(port)});
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

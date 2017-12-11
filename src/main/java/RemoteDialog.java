@@ -8,16 +8,21 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.*;
 
 public class RemoteDialog extends javax.swing.JFrame{
 
-    MicroManagerPlugin plugin;
+    private MicroManagerPlugin plugin;
 
     private DataProvider dataProvider;
     private ScriptInterface app;
     private CMMCore core;
 
-    JButton stopButton = new JButton("stop");
+    private JButton stopButton = new JButton("stop");
+
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Future serverStop;
+    private MMServer mmServer;
 
     RemoteDialog(MicroManagerPlugin plugin, ScriptInterface app) {
         this.plugin = plugin;
@@ -28,15 +33,7 @@ public class RemoteDialog extends javax.swing.JFrame{
     }
 
     private void init() {
-        JFrame frame = new JFrame("remote control");
-        frame.setLayout(new BorderLayout());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setSize(500,200);
-        frame.getContentPane().add(new JLabel("Header"), BorderLayout.NORTH);
-        frame.getContentPane().add(stopButton, BorderLayout.CENTER);
-
-        frame.pack();
-        frame.setVisible(true);
+        this.setTitle("remote control");
 
         int port = 50051;
         InetAddress addr;
@@ -49,23 +46,42 @@ public class RemoteDialog extends javax.swing.JFrame{
             addr = null;
         }
 
+        this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+
+        stopButton.setPreferredSize(new Dimension(40,40));
+
+        this.getContentPane().setSize(500,200);
+        this.getContentPane().add(new JTextArea("starting server on " + addr + "\n" +
+                "listening on port " + port), BorderLayout.NORTH);
+        this.getContentPane().add(stopButton, BorderLayout.CENTER);
+
+        this.pack();
+
+        this.setVisible(true);
+
         stopButton.setEnabled(true);
-        stopButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent ev) {
-                stopButtonActionPerformed(ev);
+        stopButton.addActionListener(this::stopButtonActionPerformed);
+
+        Callable<Void> task = () -> {
+            MMServer.SetServiceDataProvider(dataProvider);
+            try {
+                mmServer = new MMServer();
+                mmServer.start(port);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-
-//        try {
-//            MMServer.SetServiceDataProvider(dataProvider);
-//            MMServer.main(new String[] { Integer.toString(port)});
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
+            return null;
+        };
+        serverStop = executor.submit(task);
     }
 
-    private void stopButtonActionPerformed(java.awt.event.ActionEvent ev) {
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent ev)  {
+        System.out.println("stop button pressed");
+        mmServer.stop();
+        executor.shutdown();
         plugin.dispose();
+        this.dispose();
     }
 }
