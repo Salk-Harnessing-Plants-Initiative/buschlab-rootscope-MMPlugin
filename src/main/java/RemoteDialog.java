@@ -1,5 +1,5 @@
-import grpc.server.DataProvider;
-import grpc.server.MMServer;
+import grpc.rootscopeserver.DataProvider;
+import grpc.rootscopeserver.MMServer;
 import mmcorej.CMMCore;
 import org.micromanager.api.ScriptInterface;
 
@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.*;
 
-public class RemoteDialog extends javax.swing.JFrame{
+class RemoteDialog extends javax.swing.JFrame{
 
     private MicroManagerPlugin plugin;
 
@@ -21,7 +21,6 @@ public class RemoteDialog extends javax.swing.JFrame{
     private JButton stopButton = new JButton("stop");
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Future serverStop;
     private MMServer mmServer;
 
     RemoteDialog(MicroManagerPlugin plugin, ScriptInterface app) {
@@ -65,7 +64,7 @@ public class RemoteDialog extends javax.swing.JFrame{
         stopButton.addActionListener(this::stopButtonActionPerformed);
 
         Callable<Void> task = () -> {
-            MMServer.SetServiceDataProvider(dataProvider);
+            mmServer.SetServiceDataProvider(dataProvider);
             try {
                 mmServer = new MMServer();
                 mmServer.start(port);
@@ -74,7 +73,7 @@ public class RemoteDialog extends javax.swing.JFrame{
             }
             return null;
         };
-        serverStop = executor.submit(task);
+        Future serverStop = executor.submit(task);
     }
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent ev)  {

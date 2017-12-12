@@ -1,4 +1,4 @@
-import grpc.server.DataProvider;
+import grpc.rootscopeserver.DataProvider;
 import mmcorej.CMMCore;
 import mmcorej.StrVector;
 import org.micromanager.api.ScriptInterface;
@@ -30,6 +30,7 @@ public class DataProviderMM implements DataProvider {
                 try {
                     baos.close();
                 } catch (Exception e) {
+                    //
                 }
             }
             return baos.toByteArray();
@@ -54,7 +55,7 @@ public class DataProviderMM implements DataProvider {
 
             for (String entry : props) {
                 String val = core.getProperty(camera, entry);
-                builder.append('/' + entry + '-' + val);
+                builder.append('/').append(entry).append('-').append(val);
             }
         }
         catch (Exception e) {
